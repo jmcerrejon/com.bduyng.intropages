@@ -2,6 +2,6 @@
     <Window id="container">
         <View id="backgroundsContainer" />
 
-        <ScrollableView id="titlesContainer" onScroll="onScroll"/>
+        <ScrollableView id="titlesContainer" onScroll="onScroll" onClick="onClick"/>
     </Window>
 </Alloy>
