@@ -21,13 +21,20 @@ function generateViews(views) {
 
         // Add all titles and descriptions into a scrollable view
         if (view.title) {
-            title = Ti.UI.createLabel({ role: 'title', text: view.title });
+            title = Ti.UI.createLabel({
+                role: 'title',
+                text: view.title,
+            });
             if ($.args.titles) title.applyProperties($.args.titles);
         }
 
         if (view.description) {
-            description = Ti.UI.createLabel({ role: 'description', text: view.description });
-            if ($.args.descriptions) description.applyProperties($.args.descriptions);
+            description = Ti.UI.createLabel({
+                role: 'description',
+                text: view.description,
+            });
+            if ($.args.descriptions)
+                description.applyProperties($.args.descriptions);
         }
 
         var scrollableChildView = Ti.UI.createView();
@@ -40,7 +47,8 @@ function generateViews(views) {
             $['view' + i] = Ti.UI.createImageView({
                 index: i,
                 image: view.media,
-                width: Ti.UI.FILL, height: Ti.UI.FILL
+                width: Ti.UI.FILL,
+                height: Ti.UI.FILL,
             });
         }
 
@@ -66,9 +74,11 @@ function generateViews(views) {
  */
 function onScroll(e) {
     // No effect when scrolling out of bound
-    if (e.currentPageAsFloat < 0 ||
+    if (
+        e.currentPageAsFloat < 0 ||
         e.currentPageAsFloat > e.source.views.length - 1
-    ) return false;
+    )
+        return false;
 
     var delta = e.currentPageAsFloat - Math.floor(e.currentPageAsFloat);
     if (delta) delta = 1 - delta;
@@ -76,8 +86,7 @@ function onScroll(e) {
     if (e.currentPageAsFloat > $.lastPage) {
         // Go forward ==> fade out current page
         $['view' + $.lastPage].opacity = delta;
-    }
-    else if (e.currentPageAsFloat < $.lastPage) {
+    } else if (e.currentPageAsFloat < $.lastPage) {
         // Make sure last page index always >= 0
         // Fade in the previous page
         var previousPage = !$.lastPage ? 0 : $.lastPage - 1;
@@ -91,17 +100,24 @@ function onScroll(e) {
     }
 }
 
+function doClose() {
+    $.removeListener();
+
+    $.container.close();
+}
+
+function onClick() {
+    if ($.titlesContainer.currentPage === $.titlesContainer.views.length - 1) {
+        doClose();
+    }
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 // Exports
 ////////////////////////////////////////////////////////////////////////////////
 $.open = $.container.open;
 
-$.close = function() {
-    // clean up all listeners
-    $.removeListener();
-
-    $.container.close();
-};
+$.close = doClose;
 
 $.moveNext = $.titlesContainer.moveNext;
 
